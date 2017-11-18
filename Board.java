@@ -17,6 +17,11 @@ public class Board {
     
     private String[][] map = new String[row][column];
     private Player player;
+    private Wolf wolf;
+    private Sheep sheep1;
+    private Sheep sheep2;
+    private Sheep sheep3;
+    private Sheep sheep4;
     private int value = 0;
     
     private Board father;
@@ -25,14 +30,14 @@ public class Board {
     public void inicialize(){
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                map[i][j] = "'";
+                map[i][j] = "O";
             }
         }
-        map[0][3] = "L";
-        map[7][0] = "O";
-        map[7][2] = "O";
-        map[7][4] = "O";
-        map[7][6] = "O";
+        map[0][3] = "W";
+        map[7][0] = "S";
+        map[7][2] = "S";
+        map[7][4] = "S";
+        map[7][6] = "S";
     }
     
     public String[][] getMap() {
@@ -61,7 +66,463 @@ public class Board {
     public String getXY(int row, int column) {
         return map[row][column];
     }
-
+    public void setS(int row, int column) {
+        map[row][column] = "S";
+    }
+    public void setW(int row, int column) {
+        map[row][column] = "W";
+    }
+    //Limpa o campo
+    public void setO(int row, int column) {
+        map[row][column] = "O";
+    }
+    public int getResult() {
+        return 1;
+    }
+    
+    @Override
+    protected Board clone() throws CloneNotSupportedException {
+        Board t = new Board();
+        for (int i = 0; i < 8; i++) {
+            System.arraycopy(map[i], 0, t.getMap()[i], 0, 8);
+        }
+        return t;
+    }
+    
+    public ArrayList<Board> getAllMoves(Board t) {
+        child = new ArrayList<>();
+            try {
+                Board succ = t.clone();
+                if(player.equals(Player.Max)){
+                    //ovelha 1
+                    if(t.sheep1.getRow() == 7){
+                        //verifica se vazio
+                        if("O".equals(succ.getXY(t.sheep1.getRow()-1, t.sheep1.getColumn()+1)) && t.sheep1.getColumn() == 0){    
+                            //adiciona ovelha no mapa
+                            succ.setS(t.sheep1.getRow()-1, t.sheep1.getColumn()+1);
+                            //limpa posicao anterior da ovelha
+                            succ.setO(t.sheep1.getRow(),t.sheep1.getColumn());
+                            //atualiza a posicao da ovelha
+                            t.sheep1.setRow(t.sheep1.getRow()-1);
+                            t.sheep1.setColumn(t.sheep1.getColumn()+1);
+                            child.add(succ);
+                        }else {
+                            if("O".equals(succ.getXY(t.sheep1.getRow()-1, t.sheep1.getColumn()+1))){    
+                                //adiciona ovelha no mapa
+                                succ.setS(t.sheep1.getRow()-1, t.sheep1.getColumn()+1);
+                                //limpa posicao anterior da ovelha
+                                succ.setO(t.sheep1.getRow(),t.sheep1.getColumn());
+                                //atualiza a posicao da ovelha
+                                t.sheep1.setRow(t.sheep1.getRow()-1);
+                                t.sheep1.setColumn(t.sheep1.getColumn()+1);
+                                child.add(succ);
+                            }
+                            if("O".equals(succ.getXY(t.sheep1.getRow()-1, t.sheep1.getColumn()-1))){  
+                                succ = t.clone();
+                                //adiciona ovelha no mapa
+                                succ.setS(t.sheep1.getRow()-1, t.sheep1.getColumn()-1);
+                                //limpa posicao anterior da ovelha
+                                succ.setO(t.sheep1.getRow(),t.sheep1.getColumn());
+                                //atualiza a posicao da ovelha
+                                t.sheep1.setRow(t.sheep1.getRow()-1);
+                                t.sheep1.setColumn(t.sheep1.getColumn()-1);
+                                child.add(succ);
+                            }   
+                        }
+                    }else if(t.sheep1.getColumn() == 0){
+                        if("O".equals(succ.getXY(t.sheep1.getRow()-1, t.sheep1.getColumn()+1))){    
+                            //adiciona ovelha no mapa
+                            succ.setS(t.sheep1.getRow()-1, t.sheep1.getColumn()+1);
+                            //limpa posicao anterior da ovelha
+                            succ.setO(t.sheep1.getRow(),t.sheep1.getColumn());
+                            //atualiza a posicao da ovelha
+                            t.sheep1.setRow(t.sheep1.getRow()-1);
+                            t.sheep1.setColumn(t.sheep1.getColumn()+1);
+                            child.add(succ);
+                        }
+                    }
+                    else if(t.sheep1.getColumn() == 7){
+                        if("O".equals(succ.getXY(t.sheep1.getRow()-1, t.sheep1.getColumn()-1))){    
+                            //adiciona ovelha no mapa
+                            succ.setS(t.sheep1.getRow()-1, t.sheep1.getColumn()-1);
+                            //limpa posicao anterior da ovelha
+                            succ.setO(t.sheep1.getRow(),t.sheep1.getColumn());
+                            //atualiza a posicao da ovelha
+                            t.sheep1.setRow(t.sheep1.getRow()-1);
+                            t.sheep1.setColumn(t.sheep1.getColumn()-1);
+                            child.add(succ);
+                        }
+                    }else{
+                        if("O".equals(succ.getXY(t.sheep1.getRow()-1, t.sheep1.getColumn()+1))){    
+                             //adiciona ovelha no mapa
+                            succ.setS(t.sheep1.getRow()-1, t.sheep1.getColumn()+1);
+                            //limpa posicao anterior da ovelha
+                            succ.setO(t.sheep1.getRow(),t.sheep1.getColumn());
+                            //atualiza a posicao da ovelha
+                            t.sheep1.setRow(t.sheep1.getRow()-1);
+                            t.sheep1.setColumn(t.sheep1.getColumn()+1);
+                            child.add(succ);
+                        }
+                        if("O".equals(succ.getXY(t.sheep1.getRow()-1, t.sheep1.getColumn()-1))){  
+                            succ = t.clone();
+                            //adiciona ovelha no mapa
+                            succ.setS(t.sheep1.getRow()-1, t.sheep1.getColumn()-1);
+                            //limpa posicao anterior da ovelha
+                            succ.setO(t.sheep1.getRow(),t.sheep1.getColumn());
+                            //atualiza a posicao da ovelha
+                            t.sheep1.setRow(t.sheep1.getRow()-1);
+                            t.sheep1.setColumn(t.sheep1.getColumn()-1);
+                            child.add(succ);
+                        }
+                    }
+                    //ovelha 2
+                    succ = t.clone();
+                    if(t.sheep2.getRow() == 7){
+                        //verifica se vazio
+                        if("O".equals(succ.getXY(t.sheep2.getRow()-1, t.sheep2.getColumn()+1)) && t.sheep2.getColumn() == 0){    
+                            //adiciona ovelha no mapa
+                            succ.setS(t.sheep2.getRow()-1, t.sheep2.getColumn()+1);
+                            //limpa posicao anterior da ovelha
+                            succ.setO(t.sheep2.getRow(),t.sheep2.getColumn());
+                            //atualiza a posicao da ovelha
+                            t.sheep2.setRow(t.sheep2.getRow()-1);
+                            t.sheep2.setColumn(t.sheep2.getColumn()+1);
+                            child.add(succ);
+                        }else {
+                            if("O".equals(succ.getXY(t.sheep2.getRow()-1, t.sheep2.getColumn()+1))){    
+                                //adiciona ovelha no mapa
+                                succ.setS(t.sheep2.getRow()-1, t.sheep2.getColumn()+1);
+                                //limpa posicao anterior da ovelha
+                                succ.setO(t.sheep2.getRow(),t.sheep2.getColumn());
+                                //atualiza a posicao da ovelha
+                                t.sheep2.setRow(t.sheep2.getRow()-1);
+                                t.sheep2.setColumn(t.sheep2.getColumn()+1);
+                                child.add(succ);
+                            }
+                            if("O".equals(succ.getXY(t.sheep2.getRow()-1, t.sheep2.getColumn()-1))){  
+                                succ = t.clone();
+                                //adiciona ovelha no mapa
+                                succ.setS(t.sheep2.getRow()-1, t.sheep2.getColumn()-1);
+                                //limpa posicao anterior da ovelha
+                                succ.setO(t.sheep2.getRow(),t.sheep2.getColumn());
+                                //atualiza a posicao da ovelha
+                                t.sheep2.setRow(t.sheep2.getRow()-1);
+                                t.sheep2.setColumn(t.sheep2.getColumn()-1);
+                                child.add(succ);
+                            }   
+                        }
+                    }else if(t.sheep2.getColumn() == 0){
+                        if("O".equals(succ.getXY(t.sheep2.getRow()-1, t.sheep2.getColumn()+1))){    
+                            //adiciona ovelha no mapa
+                            succ.setS(t.sheep2.getRow()-1, t.sheep2.getColumn()+1);
+                            //limpa posicao anterior da ovelha
+                            succ.setO(t.sheep2.getRow(),t.sheep2.getColumn());
+                            //atualiza a posicao da ovelha
+                            t.sheep2.setRow(t.sheep2.getRow()-1);
+                            t.sheep2.setColumn(t.sheep2.getColumn()+1);
+                            child.add(succ);
+                        }
+                    }
+                    else if(t.sheep2.getColumn() == 7){
+                        if("O".equals(succ.getXY(t.sheep2.getRow()-1, t.sheep2.getColumn()-1))){    
+                            //adiciona ovelha no mapa
+                            succ.setS(t.sheep2.getRow()-1, t.sheep2.getColumn()-1);
+                            //limpa posicao anterior da ovelha
+                            succ.setO(t.sheep2.getRow(),t.sheep2.getColumn());
+                            //atualiza a posicao da ovelha
+                            t.sheep2.setRow(t.sheep2.getRow()-1);
+                            t.sheep2.setColumn(t.sheep2.getColumn()-1);
+                            child.add(succ);
+                        }
+                    }else{
+                        if("O".equals(succ.getXY(t.sheep2.getRow()-1, t.sheep2.getColumn()+1))){    
+                             //adiciona ovelha no mapa
+                            succ.setS(t.sheep2.getRow()-1, t.sheep2.getColumn()+1);
+                            //limpa posicao anterior da ovelha
+                            succ.setO(t.sheep2.getRow(),t.sheep2.getColumn());
+                            //atualiza a posicao da ovelha
+                            t.sheep2.setRow(t.sheep2.getRow()-1);
+                            t.sheep2.setColumn(t.sheep2.getColumn()+1);
+                            child.add(succ);
+                        }
+                        if("O".equals(succ.getXY(t.sheep2.getRow()-1, t.sheep2.getColumn()-1))){  
+                            succ = t.clone();
+                            //adiciona ovelha no mapa
+                            succ.setS(t.sheep2.getRow()-1, t.sheep2.getColumn()-1);
+                            //limpa posicao anterior da ovelha
+                            succ.setO(t.sheep2.getRow(),t.sheep2.getColumn());
+                            //atualiza a posicao da ovelha
+                            t.sheep2.setRow(t.sheep2.getRow()-1);
+                            t.sheep2.setColumn(t.sheep2.getColumn()-1);
+                            child.add(succ);
+                        }
+                    }
+                    //sheep 3
+                    succ = t.clone();
+                    if(t.sheep3.getRow() == 7){
+                        //verifica se vazio
+                        if("O".equals(succ.getXY(t.sheep3.getRow()-1, t.sheep3.getColumn()+1)) && t.sheep3.getColumn() == 0){    
+                            //adiciona ovelha no mapa
+                            succ.setS(t.sheep3.getRow()-1, t.sheep3.getColumn()+1);
+                            //limpa posicao anterior da ovelha
+                            succ.setO(t.sheep3.getRow(),t.sheep3.getColumn());
+                            //atualiza a posicao da ovelha
+                            t.sheep3.setRow(t.sheep3.getRow()-1);
+                            t.sheep3.setColumn(t.sheep3.getColumn()+1);
+                            child.add(succ);
+                        }else {
+                            if("O".equals(succ.getXY(t.sheep3.getRow()-1, t.sheep3.getColumn()+1))){    
+                                //adiciona ovelha no mapa
+                                succ.setS(t.sheep3.getRow()-1, t.sheep3.getColumn()+1);
+                                //limpa posicao anterior da ovelha
+                                succ.setO(t.sheep3.getRow(),t.sheep3.getColumn());
+                                //atualiza a posicao da ovelha
+                                t.sheep3.setRow(t.sheep3.getRow()-1);
+                                t.sheep3.setColumn(t.sheep3.getColumn()+1);
+                                child.add(succ);
+                            }
+                            if("O".equals(succ.getXY(t.sheep3.getRow()-1, t.sheep3.getColumn()-1))){  
+                                succ = t.clone();
+                                //adiciona ovelha no mapa
+                                succ.setS(t.sheep3.getRow()-1, t.sheep3.getColumn()-1);
+                                //limpa posicao anterior da ovelha
+                                succ.setO(t.sheep3.getRow(),t.sheep3.getColumn());
+                                //atualiza a posicao da ovelha
+                                t.sheep3.setRow(t.sheep3.getRow()-1);
+                                t.sheep3.setColumn(t.sheep3.getColumn()-1);
+                                child.add(succ);
+                            }   
+                        }
+                    }else if(t.sheep3.getColumn() == 0){
+                        if("O".equals(succ.getXY(t.sheep3.getRow()-1, t.sheep3.getColumn()+1))){    
+                            //adiciona ovelha no mapa
+                            succ.setS(t.sheep3.getRow()-1, t.sheep3.getColumn()+1);
+                            //limpa posicao anterior da ovelha
+                            succ.setO(t.sheep3.getRow(),t.sheep3.getColumn());
+                            //atualiza a posicao da ovelha
+                            t.sheep3.setRow(t.sheep3.getRow()-1);
+                            t.sheep3.setColumn(t.sheep3.getColumn()+1);
+                            child.add(succ);
+                        }
+                    }
+                    else if(t.sheep3.getColumn() == 7){
+                        if("O".equals(succ.getXY(t.sheep3.getRow()-1, t.sheep3.getColumn()-1))){    
+                            //adiciona ovelha no mapa
+                            succ.setS(t.sheep3.getRow()-1, t.sheep3.getColumn()-1);
+                            //limpa posicao anterior da ovelha
+                            succ.setO(t.sheep3.getRow(),t.sheep3.getColumn());
+                            //atualiza a posicao da ovelha
+                            t.sheep3.setRow(t.sheep3.getRow()-1);
+                            t.sheep3.setColumn(t.sheep3.getColumn()-1);
+                            child.add(succ);
+                        }
+                    }else{
+                        if("O".equals(succ.getXY(t.sheep3.getRow()-1, t.sheep3.getColumn()+1))){    
+                             //adiciona ovelha no mapa
+                            succ.setS(t.sheep3.getRow()-1, t.sheep3.getColumn()+1);
+                            //limpa posicao anterior da ovelha
+                            succ.setO(t.sheep3.getRow(),t.sheep3.getColumn());
+                            //atualiza a posicao da ovelha
+                            t.sheep3.setRow(t.sheep3.getRow()-1);
+                            t.sheep3.setColumn(t.sheep3.getColumn()+1);
+                            child.add(succ);
+                        }
+                        if("O".equals(succ.getXY(t.sheep3.getRow()-1, t.sheep3.getColumn()-1))){  
+                            succ = t.clone();
+                            //adiciona ovelha no mapa
+                            succ.setS(t.sheep3.getRow()-1, t.sheep3.getColumn()-1);
+                            //limpa posicao anterior da ovelha
+                            succ.setO(t.sheep3.getRow(),t.sheep3.getColumn());
+                            //atualiza a posicao da ovelha
+                            t.sheep3.setRow(t.sheep3.getRow()-1);
+                            t.sheep3.setColumn(t.sheep3.getColumn()-1);
+                            child.add(succ);
+                        }
+                    }
+                    //ovelha 4
+                    succ = t.clone();
+                    if(t.sheep4.getRow() == 7){
+                        //verifica se vazio
+                        if("O".equals(succ.getXY(t.sheep4.getRow()-1, t.sheep4.getColumn()+1)) && t.sheep4.getColumn() == 0){    
+                            //adiciona ovelha no mapa
+                            succ.setS(t.sheep4.getRow()-1, t.sheep4.getColumn()+1);
+                            //limpa posicao anterior da ovelha
+                            succ.setO(t.sheep4.getRow(),t.sheep4.getColumn());
+                            //atualiza a posicao da ovelha
+                            t.sheep4.setRow(t.sheep4.getRow()-1);
+                            t.sheep4.setColumn(t.sheep4.getColumn()+1);
+                            child.add(succ);
+                        }else {
+                            if("O".equals(succ.getXY(t.sheep4.getRow()-1, t.sheep4.getColumn()+1))){    
+                                //adiciona ovelha no mapa
+                                succ.setS(t.sheep4.getRow()-1, t.sheep4.getColumn()+1);
+                                //limpa posicao anterior da ovelha
+                                succ.setO(t.sheep4.getRow(),t.sheep4.getColumn());
+                                //atualiza a posicao da ovelha
+                                t.sheep4.setRow(t.sheep4.getRow()-1);
+                                t.sheep4.setColumn(t.sheep4.getColumn()+1);
+                                child.add(succ);
+                            }
+                            if("O".equals(succ.getXY(t.sheep4.getRow()-1, t.sheep4.getColumn()-1))){  
+                                succ = t.clone();
+                                //adiciona ovelha no mapa
+                                succ.setS(t.sheep4.getRow()-1, t.sheep4.getColumn()-1);
+                                //limpa posicao anterior da ovelha
+                                succ.setO(t.sheep4.getRow(),t.sheep4.getColumn());
+                                //atualiza a posicao da ovelha
+                                t.sheep4.setRow(t.sheep4.getRow()-1);
+                                t.sheep4.setColumn(t.sheep4.getColumn()-1);
+                                child.add(succ);
+                            }   
+                        }
+                    }else if(t.sheep4.getColumn() == 0){
+                        if("O".equals(succ.getXY(t.sheep4.getRow()-1, t.sheep4.getColumn()+1))){    
+                            //adiciona ovelha no mapa
+                            succ.setS(t.sheep4.getRow()-1, t.sheep4.getColumn()+1);
+                            //limpa posicao anterior da ovelha
+                            succ.setO(t.sheep4.getRow(),t.sheep4.getColumn());
+                            //atualiza a posicao da ovelha
+                            t.sheep4.setRow(t.sheep4.getRow()-1);
+                            t.sheep4.setColumn(t.sheep4.getColumn()+1);
+                            child.add(succ);
+                        }
+                    }
+                    else if(t.sheep4.getColumn() == 7){
+                        if("O".equals(succ.getXY(t.sheep4.getRow()-1, t.sheep4.getColumn()-1))){    
+                            //adiciona ovelha no mapa
+                            succ.setS(t.sheep4.getRow()-1, t.sheep4.getColumn()-1);
+                            //limpa posicao anterior da ovelha
+                            succ.setO(t.sheep4.getRow(),t.sheep4.getColumn());
+                            //atualiza a posicao da ovelha
+                            t.sheep4.setRow(t.sheep4.getRow()-1);
+                            t.sheep4.setColumn(t.sheep4.getColumn()-1);
+                            child.add(succ);
+                        }
+                    }else{
+                        if("O".equals(succ.getXY(t.sheep4.getRow()-1, t.sheep4.getColumn()+1))){    
+                             //adiciona ovelha no mapa
+                            succ.setS(t.sheep4.getRow()-1, t.sheep4.getColumn()+1);
+                            //limpa posicao anterior da ovelha
+                            succ.setO(t.sheep4.getRow(),t.sheep4.getColumn());
+                            //atualiza a posicao da ovelha
+                            t.sheep4.setRow(t.sheep4.getRow()-1);
+                            t.sheep4.setColumn(t.sheep4.getColumn()+1);
+                            child.add(succ);
+                        }
+                        if("O".equals(succ.getXY(t.sheep4.getRow()-1, t.sheep4.getColumn()-1))){  
+                            succ = t.clone();
+                            //adiciona ovelha no mapa
+                            succ.setS(t.sheep4.getRow()-1, t.sheep4.getColumn()-1);
+                            //limpa posicao anterior da ovelha
+                            succ.setO(t.sheep4.getRow(),t.sheep4.getColumn());
+                            //atualiza a posicao da ovelha
+                            t.sheep4.setRow(t.sheep4.getRow()-1);
+                            t.sheep4.setColumn(t.sheep4.getColumn()-1);
+                            child.add(succ);
+                        }
+                    }
+                }else{
+                    if(t.wolf.getRow() == 0){
+                        //verifica diagonal esquerda inferior vazia
+                        if("O".equals(succ.getXY(t.wolf.getRow()+1, t.wolf.getColumn()-1))){
+                            //adiciona lobo no mapa
+                            succ.setW(t.wolf.getRow()+1, t.wolf.getColumn()-1);
+                            //limpa posicao anterior do lobo
+                            succ.setO(t.wolf.getRow(),t.wolf.getColumn());
+                            //atualiza a posicao do lobo
+                            t.wolf.setRow(t.wolf.getRow()+1);
+                            t.wolf.setColumn(t.wolf.getColumn()-1);
+                            child.add(succ);
+                        }
+                        //verifica diagonal direita inferior vazia
+                        if("O".equals(succ.getXY(t.wolf.getRow()+1, t.wolf.getColumn()+1))){
+                            succ = t.clone();
+                            succ.setW(t.wolf.getRow()+1, t.wolf.getColumn()+1);
+                            succ.setO(t.wolf.getRow(),t.wolf.getColumn());
+                            t.wolf.setRow(t.wolf.getRow()+1);
+                            t.wolf.setColumn(t.wolf.getColumn()+1);
+                            child.add(succ);
+                        }
+                    }else if(t.wolf.getColumn() == 0){
+                        if("O".equals(succ.getXY(t.wolf.getRow()+1, t.wolf.getColumn()+1))){
+                            succ.setW(t.wolf.getRow()+1, t.wolf.getColumn()+1);
+                            succ.setO(t.wolf.getRow(),t.wolf.getColumn());
+                            t.wolf.setRow(t.wolf.getRow()+1);
+                            t.wolf.setColumn(t.wolf.getColumn()+1);
+                            child.add(succ);
+                        }
+                        if("O".equals(succ.getXY(t.wolf.getRow()-1, t.wolf.getColumn()+1))){
+                            succ = t.clone();
+                            succ.setW(t.wolf.getRow()-1, t.wolf.getColumn()+1);
+                            succ.setO(t.wolf.getRow(),t.wolf.getColumn());
+                            t.wolf.setRow(t.wolf.getRow()-1);
+                            t.wolf.setColumn(t.wolf.getColumn()+1);
+                            child.add(succ);
+                        }
+                    }else if(t.wolf.getColumn() == 7){
+                        if(t.wolf.getRow() == 0 && "O".equals(succ.getXY(t.wolf.getRow()+1, t.wolf.getColumn()-1))){
+                            succ.setW(t.wolf.getRow()+1, t.wolf.getColumn()-1);
+                            succ.setO(t.wolf.getRow(),t.wolf.getColumn());
+                            t.wolf.setRow(t.wolf.getRow()+1);
+                            t.wolf.setColumn(t.wolf.getColumn()-1);
+                            child.add(succ);
+                        }else{
+                            if("O".equals(succ.getXY(t.wolf.getRow()+1, t.wolf.getColumn()-1))){
+                                succ.setW(t.wolf.getRow()+1, t.wolf.getColumn()-1);
+                                succ.setO(t.wolf.getRow(),t.wolf.getColumn());
+                                t.wolf.setRow(t.wolf.getRow()+1);
+                                t.wolf.setColumn(t.wolf.getColumn()-1);
+                                child.add(succ);
+                            }
+                            if("O".equals(succ.getXY(t.wolf.getRow()-1, t.wolf.getColumn()-1))){
+                                succ = t.clone();
+                                succ.setW(t.wolf.getRow()-1, t.wolf.getColumn()-1);
+                                succ.setO(t.wolf.getRow(),t.wolf.getColumn());
+                                t.wolf.setRow(t.wolf.getRow()-1);
+                                t.wolf.setColumn(t.wolf.getColumn()-1);
+                                child.add(succ);
+                            }
+                        }
+                    }else{
+                        if("O".equals(succ.getXY(t.wolf.getRow()-1, t.wolf.getColumn()-1))){
+                            succ.setW(t.wolf.getRow()-1, t.wolf.getColumn()-1);
+                            succ.setO(t.wolf.getRow(),t.wolf.getColumn());
+                            t.wolf.setRow(t.wolf.getRow()-1);
+                            t.wolf.setColumn(t.wolf.getColumn()-1);
+                            child.add(succ);
+                        }
+                        if("O".equals(succ.getXY(t.wolf.getRow()-1, t.wolf.getColumn()+1))){
+                            succ = t.clone();
+                            succ.setW(t.wolf.getRow()-1, t.wolf.getColumn()+1);
+                            succ.setO(t.wolf.getRow(),t.wolf.getColumn());
+                            t.wolf.setRow(t.wolf.getRow()-1);
+                            t.wolf.setColumn(t.wolf.getColumn()+1);
+                            child.add(succ);
+                        }
+                        if("O".equals(succ.getXY(t.wolf.getRow()+1, t.wolf.getColumn()-1))){
+                            succ = t.clone();
+                            succ.setW(t.wolf.getRow()+1, t.wolf.getColumn()-1);
+                            succ.setO(t.wolf.getRow(),t.wolf.getColumn());
+                            t.wolf.setRow(t.wolf.getRow()+1);
+                            t.wolf.setColumn(t.wolf.getColumn()-1);
+                            child.add(succ);
+                        }
+                        if("O".equals(succ.getXY(t.wolf.getRow()+1, t.wolf.getColumn()+1))){
+                            succ = t.clone();
+                            succ.setW(t.wolf.getRow()+1, t.wolf.getColumn()+1);
+                            succ.setO(t.wolf.getRow(),t.wolf.getColumn());
+                            t.wolf.setRow(t.wolf.getRow()+1);
+                            t.wolf.setColumn(t.wolf.getColumn()+1);
+                            child.add(succ);
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                    System.out.println(e);
+            }
+        return child;
+    }
+    
     @Override
     public String toString() {
         String s = "";

@@ -12,32 +12,32 @@ import java.util.ArrayList;
  * @author Matheus Ikeda
  */
 public class Board {
-    private static final int row = 8;
-    private static final int column = 8;
+    private static final int LENGTH = 8;
     
-    private String[][] map = new String[row][column];
+    private String[][] map = new String[LENGTH][LENGTH];
     private Player player;
-    private Wolf wolf;
-    private Sheep sheep1;
-    private Sheep sheep2;
-    private Sheep sheep3;
-    private Sheep sheep4;
+    private Wolf wolf = new Wolf(0, 3);
+    private Sheep sheep1 = new Sheep(7, 0);
+    private Sheep sheep2 = new Sheep(7, 2);
+    private Sheep sheep3 = new Sheep(7, 4);;
+    private Sheep sheep4 = new Sheep(7, 6);;
     private int value = 0;
     
     private Board father;
     private ArrayList<Board> child = new ArrayList<Board>();
     
     public void inicialize(){
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
+        for (int i = 0; i < LENGTH; i++) {
+            for (int j = 0; j < LENGTH; j++) {
                 map[i][j] = "O";
             }
         }
         map[0][3] = "W";
-        map[7][0] = "S";
-        map[7][2] = "S";
+        map[7][0] = "S";       
+        map[7][2] = "S"; 
         map[7][4] = "S";
         map[7][6] = "S";
+        
     }
     
     public String[][] getMap() {
@@ -76,15 +76,56 @@ public class Board {
     public void setO(int row, int column) {
         map[row][column] = "O";
     }
-    public int getResult() {
-        return 1;
+    //verifica se computador perdeu (Lobo ganhou)
+    public boolean lose(){
+        return wolf.getRow() == 7;
     }
-    
+    public boolean win(){
+        if(wolf.getRow() == 0 && wolf.getColumn() == 7){
+            if(!"O".equals(map[wolf.getRow()+1][wolf.getColumn()])){
+                return true;
+            }
+            else{
+                if(!"O".equals(map[wolf.getRow()+1][wolf.getColumn()-1]) && !"O".equals(map[wolf.getRow()+1][wolf.getColumn()+1])){
+                    return true;
+                }
+            }
+        }else if(wolf.getColumn() == 0){
+            if(!"O".equals(map[wolf.getRow()-1][wolf.getColumn()+1]) && !"O".equals(map[wolf.getRow()+1][wolf.getColumn()+1])){
+                return true;
+            }
+        }else if(wolf.getColumn() == 7){
+           if(!"O".equals(map[wolf.getRow()-1][wolf.getColumn()-1]) && !"O".equals(map[wolf.getRow()+1][wolf.getColumn()-1])){
+                return true;
+           } 
+        }else{
+           if(!"O".equals(map[wolf.getRow()-1][wolf.getColumn()-1]) && !"O".equals(map[wolf.getRow()+1][wolf.getColumn()-1]) && !"O".equals(map[wolf.getRow()-1][wolf.getColumn()+1]) && !"O".equals(map[wolf.getRow()+1][wolf.getColumn()+1])){
+                return true;
+           } 
+        }
+        return false;
+    }
+    public int getResult() {
+        if(lose()){
+            value = -1;
+            return -1;
+        }else if(win()){
+            value = 1;
+            return 1;
+        }else 
+            return 0;
+    }
+    public boolean isTerminal(){
+        return win() || lose();
+    }    
+    public ArrayList<Board> getAllBoard(){
+        return child;
+    }
     @Override
     protected Board clone() throws CloneNotSupportedException {
         Board t = new Board();
-        for (int i = 0; i < 8; i++) {
-            System.arraycopy(map[i], 0, t.getMap()[i], 0, 8);
+        for (int i = 0; i < LENGTH; i++) {
+            System.arraycopy(map[i], 0, t.getMap()[i], 0, LENGTH);
         }
         return t;
     }
@@ -105,6 +146,7 @@ public class Board {
                             //atualiza a posicao da ovelha
                             t.sheep1.setRow(t.sheep1.getRow()-1);
                             t.sheep1.setColumn(t.sheep1.getColumn()+1);
+                            succ.getResult();
                             child.add(succ);
                         }else {
                             if("O".equals(succ.getXY(t.sheep1.getRow()-1, t.sheep1.getColumn()+1))){    
@@ -115,6 +157,7 @@ public class Board {
                                 //atualiza a posicao da ovelha
                                 t.sheep1.setRow(t.sheep1.getRow()-1);
                                 t.sheep1.setColumn(t.sheep1.getColumn()+1);
+                                succ.getResult();
                                 child.add(succ);
                             }
                             if("O".equals(succ.getXY(t.sheep1.getRow()-1, t.sheep1.getColumn()-1))){  
@@ -126,6 +169,7 @@ public class Board {
                                 //atualiza a posicao da ovelha
                                 t.sheep1.setRow(t.sheep1.getRow()-1);
                                 t.sheep1.setColumn(t.sheep1.getColumn()-1);
+                                succ.getResult();
                                 child.add(succ);
                             }   
                         }
@@ -138,6 +182,7 @@ public class Board {
                             //atualiza a posicao da ovelha
                             t.sheep1.setRow(t.sheep1.getRow()-1);
                             t.sheep1.setColumn(t.sheep1.getColumn()+1);
+                            succ.getResult();
                             child.add(succ);
                         }
                     }
@@ -150,6 +195,7 @@ public class Board {
                             //atualiza a posicao da ovelha
                             t.sheep1.setRow(t.sheep1.getRow()-1);
                             t.sheep1.setColumn(t.sheep1.getColumn()-1);
+                            succ.getResult();
                             child.add(succ);
                         }
                     }else{
@@ -161,6 +207,7 @@ public class Board {
                             //atualiza a posicao da ovelha
                             t.sheep1.setRow(t.sheep1.getRow()-1);
                             t.sheep1.setColumn(t.sheep1.getColumn()+1);
+                            succ.getResult();
                             child.add(succ);
                         }
                         if("O".equals(succ.getXY(t.sheep1.getRow()-1, t.sheep1.getColumn()-1))){  
@@ -172,6 +219,7 @@ public class Board {
                             //atualiza a posicao da ovelha
                             t.sheep1.setRow(t.sheep1.getRow()-1);
                             t.sheep1.setColumn(t.sheep1.getColumn()-1);
+                            succ.getResult();
                             child.add(succ);
                         }
                     }
@@ -187,6 +235,7 @@ public class Board {
                             //atualiza a posicao da ovelha
                             t.sheep2.setRow(t.sheep2.getRow()-1);
                             t.sheep2.setColumn(t.sheep2.getColumn()+1);
+                            succ.getResult();
                             child.add(succ);
                         }else {
                             if("O".equals(succ.getXY(t.sheep2.getRow()-1, t.sheep2.getColumn()+1))){    
@@ -197,6 +246,7 @@ public class Board {
                                 //atualiza a posicao da ovelha
                                 t.sheep2.setRow(t.sheep2.getRow()-1);
                                 t.sheep2.setColumn(t.sheep2.getColumn()+1);
+                                succ.getResult();
                                 child.add(succ);
                             }
                             if("O".equals(succ.getXY(t.sheep2.getRow()-1, t.sheep2.getColumn()-1))){  
@@ -208,6 +258,7 @@ public class Board {
                                 //atualiza a posicao da ovelha
                                 t.sheep2.setRow(t.sheep2.getRow()-1);
                                 t.sheep2.setColumn(t.sheep2.getColumn()-1);
+                                succ.getResult();
                                 child.add(succ);
                             }   
                         }
@@ -220,6 +271,7 @@ public class Board {
                             //atualiza a posicao da ovelha
                             t.sheep2.setRow(t.sheep2.getRow()-1);
                             t.sheep2.setColumn(t.sheep2.getColumn()+1);
+                            succ.getResult();
                             child.add(succ);
                         }
                     }
@@ -232,6 +284,7 @@ public class Board {
                             //atualiza a posicao da ovelha
                             t.sheep2.setRow(t.sheep2.getRow()-1);
                             t.sheep2.setColumn(t.sheep2.getColumn()-1);
+                            succ.getResult();
                             child.add(succ);
                         }
                     }else{
@@ -243,6 +296,7 @@ public class Board {
                             //atualiza a posicao da ovelha
                             t.sheep2.setRow(t.sheep2.getRow()-1);
                             t.sheep2.setColumn(t.sheep2.getColumn()+1);
+                            succ.getResult();
                             child.add(succ);
                         }
                         if("O".equals(succ.getXY(t.sheep2.getRow()-1, t.sheep2.getColumn()-1))){  
@@ -254,6 +308,7 @@ public class Board {
                             //atualiza a posicao da ovelha
                             t.sheep2.setRow(t.sheep2.getRow()-1);
                             t.sheep2.setColumn(t.sheep2.getColumn()-1);
+                            succ.getResult();
                             child.add(succ);
                         }
                     }
@@ -269,6 +324,7 @@ public class Board {
                             //atualiza a posicao da ovelha
                             t.sheep3.setRow(t.sheep3.getRow()-1);
                             t.sheep3.setColumn(t.sheep3.getColumn()+1);
+                            succ.getResult();
                             child.add(succ);
                         }else {
                             if("O".equals(succ.getXY(t.sheep3.getRow()-1, t.sheep3.getColumn()+1))){    
@@ -279,6 +335,7 @@ public class Board {
                                 //atualiza a posicao da ovelha
                                 t.sheep3.setRow(t.sheep3.getRow()-1);
                                 t.sheep3.setColumn(t.sheep3.getColumn()+1);
+                                succ.getResult();
                                 child.add(succ);
                             }
                             if("O".equals(succ.getXY(t.sheep3.getRow()-1, t.sheep3.getColumn()-1))){  
@@ -290,6 +347,7 @@ public class Board {
                                 //atualiza a posicao da ovelha
                                 t.sheep3.setRow(t.sheep3.getRow()-1);
                                 t.sheep3.setColumn(t.sheep3.getColumn()-1);
+                                succ.getResult();
                                 child.add(succ);
                             }   
                         }
@@ -302,6 +360,7 @@ public class Board {
                             //atualiza a posicao da ovelha
                             t.sheep3.setRow(t.sheep3.getRow()-1);
                             t.sheep3.setColumn(t.sheep3.getColumn()+1);
+                            succ.getResult();
                             child.add(succ);
                         }
                     }
@@ -314,6 +373,7 @@ public class Board {
                             //atualiza a posicao da ovelha
                             t.sheep3.setRow(t.sheep3.getRow()-1);
                             t.sheep3.setColumn(t.sheep3.getColumn()-1);
+                            succ.getResult();
                             child.add(succ);
                         }
                     }else{
@@ -325,6 +385,7 @@ public class Board {
                             //atualiza a posicao da ovelha
                             t.sheep3.setRow(t.sheep3.getRow()-1);
                             t.sheep3.setColumn(t.sheep3.getColumn()+1);
+                            succ.getResult();
                             child.add(succ);
                         }
                         if("O".equals(succ.getXY(t.sheep3.getRow()-1, t.sheep3.getColumn()-1))){  
@@ -336,6 +397,7 @@ public class Board {
                             //atualiza a posicao da ovelha
                             t.sheep3.setRow(t.sheep3.getRow()-1);
                             t.sheep3.setColumn(t.sheep3.getColumn()-1);
+                            succ.getResult();
                             child.add(succ);
                         }
                     }
@@ -351,6 +413,7 @@ public class Board {
                             //atualiza a posicao da ovelha
                             t.sheep4.setRow(t.sheep4.getRow()-1);
                             t.sheep4.setColumn(t.sheep4.getColumn()+1);
+                            succ.getResult();
                             child.add(succ);
                         }else {
                             if("O".equals(succ.getXY(t.sheep4.getRow()-1, t.sheep4.getColumn()+1))){    
@@ -361,6 +424,7 @@ public class Board {
                                 //atualiza a posicao da ovelha
                                 t.sheep4.setRow(t.sheep4.getRow()-1);
                                 t.sheep4.setColumn(t.sheep4.getColumn()+1);
+                                succ.getResult();
                                 child.add(succ);
                             }
                             if("O".equals(succ.getXY(t.sheep4.getRow()-1, t.sheep4.getColumn()-1))){  
@@ -372,6 +436,7 @@ public class Board {
                                 //atualiza a posicao da ovelha
                                 t.sheep4.setRow(t.sheep4.getRow()-1);
                                 t.sheep4.setColumn(t.sheep4.getColumn()-1);
+                                succ.getResult();
                                 child.add(succ);
                             }   
                         }
@@ -384,6 +449,7 @@ public class Board {
                             //atualiza a posicao da ovelha
                             t.sheep4.setRow(t.sheep4.getRow()-1);
                             t.sheep4.setColumn(t.sheep4.getColumn()+1);
+                            succ.getResult();
                             child.add(succ);
                         }
                     }
@@ -396,6 +462,7 @@ public class Board {
                             //atualiza a posicao da ovelha
                             t.sheep4.setRow(t.sheep4.getRow()-1);
                             t.sheep4.setColumn(t.sheep4.getColumn()-1);
+                            succ.getResult();
                             child.add(succ);
                         }
                     }else{
@@ -407,6 +474,7 @@ public class Board {
                             //atualiza a posicao da ovelha
                             t.sheep4.setRow(t.sheep4.getRow()-1);
                             t.sheep4.setColumn(t.sheep4.getColumn()+1);
+                            succ.getResult();
                             child.add(succ);
                         }
                         if("O".equals(succ.getXY(t.sheep4.getRow()-1, t.sheep4.getColumn()-1))){  
@@ -418,9 +486,11 @@ public class Board {
                             //atualiza a posicao da ovelha
                             t.sheep4.setRow(t.sheep4.getRow()-1);
                             t.sheep4.setColumn(t.sheep4.getColumn()-1);
+                            succ.getResult();
                             child.add(succ);
                         }
                     }
+                //movimentos do lobo
                 }else{
                     if(t.wolf.getRow() == 0){
                         //verifica diagonal esquerda inferior vazia
@@ -432,6 +502,7 @@ public class Board {
                             //atualiza a posicao do lobo
                             t.wolf.setRow(t.wolf.getRow()+1);
                             t.wolf.setColumn(t.wolf.getColumn()-1);
+                            succ.getResult();
                             child.add(succ);
                         }
                         //verifica diagonal direita inferior vazia
@@ -441,14 +512,17 @@ public class Board {
                             succ.setO(t.wolf.getRow(),t.wolf.getColumn());
                             t.wolf.setRow(t.wolf.getRow()+1);
                             t.wolf.setColumn(t.wolf.getColumn()+1);
+                            succ.getResult();
                             child.add(succ);
                         }
+                        
                     }else if(t.wolf.getColumn() == 0){
                         if("O".equals(succ.getXY(t.wolf.getRow()+1, t.wolf.getColumn()+1))){
                             succ.setW(t.wolf.getRow()+1, t.wolf.getColumn()+1);
                             succ.setO(t.wolf.getRow(),t.wolf.getColumn());
                             t.wolf.setRow(t.wolf.getRow()+1);
                             t.wolf.setColumn(t.wolf.getColumn()+1);
+                            succ.getResult();
                             child.add(succ);
                         }
                         if("O".equals(succ.getXY(t.wolf.getRow()-1, t.wolf.getColumn()+1))){
@@ -457,6 +531,7 @@ public class Board {
                             succ.setO(t.wolf.getRow(),t.wolf.getColumn());
                             t.wolf.setRow(t.wolf.getRow()-1);
                             t.wolf.setColumn(t.wolf.getColumn()+1);
+                            succ.getResult();
                             child.add(succ);
                         }
                     }else if(t.wolf.getColumn() == 7){
@@ -465,6 +540,7 @@ public class Board {
                             succ.setO(t.wolf.getRow(),t.wolf.getColumn());
                             t.wolf.setRow(t.wolf.getRow()+1);
                             t.wolf.setColumn(t.wolf.getColumn()-1);
+                            succ.getResult();
                             child.add(succ);
                         }else{
                             if("O".equals(succ.getXY(t.wolf.getRow()+1, t.wolf.getColumn()-1))){
@@ -472,6 +548,7 @@ public class Board {
                                 succ.setO(t.wolf.getRow(),t.wolf.getColumn());
                                 t.wolf.setRow(t.wolf.getRow()+1);
                                 t.wolf.setColumn(t.wolf.getColumn()-1);
+                                succ.getResult();
                                 child.add(succ);
                             }
                             if("O".equals(succ.getXY(t.wolf.getRow()-1, t.wolf.getColumn()-1))){
@@ -480,6 +557,7 @@ public class Board {
                                 succ.setO(t.wolf.getRow(),t.wolf.getColumn());
                                 t.wolf.setRow(t.wolf.getRow()-1);
                                 t.wolf.setColumn(t.wolf.getColumn()-1);
+                                succ.getResult();
                                 child.add(succ);
                             }
                         }
@@ -489,6 +567,7 @@ public class Board {
                             succ.setO(t.wolf.getRow(),t.wolf.getColumn());
                             t.wolf.setRow(t.wolf.getRow()-1);
                             t.wolf.setColumn(t.wolf.getColumn()-1);
+                            succ.getResult();
                             child.add(succ);
                         }
                         if("O".equals(succ.getXY(t.wolf.getRow()-1, t.wolf.getColumn()+1))){
@@ -497,6 +576,7 @@ public class Board {
                             succ.setO(t.wolf.getRow(),t.wolf.getColumn());
                             t.wolf.setRow(t.wolf.getRow()-1);
                             t.wolf.setColumn(t.wolf.getColumn()+1);
+                            succ.getResult();
                             child.add(succ);
                         }
                         if("O".equals(succ.getXY(t.wolf.getRow()+1, t.wolf.getColumn()-1))){
@@ -505,6 +585,7 @@ public class Board {
                             succ.setO(t.wolf.getRow(),t.wolf.getColumn());
                             t.wolf.setRow(t.wolf.getRow()+1);
                             t.wolf.setColumn(t.wolf.getColumn()-1);
+                            succ.getResult();
                             child.add(succ);
                         }
                         if("O".equals(succ.getXY(t.wolf.getRow()+1, t.wolf.getColumn()+1))){
@@ -513,11 +594,12 @@ public class Board {
                             succ.setO(t.wolf.getRow(),t.wolf.getColumn());
                             t.wolf.setRow(t.wolf.getRow()+1);
                             t.wolf.setColumn(t.wolf.getColumn()+1);
+                            succ.getResult();
                             child.add(succ);
                         }
                     }
                 }
-            } catch (Exception e) {
+            } catch (CloneNotSupportedException e) {
                     System.out.println(e);
             }
         return child;
@@ -526,8 +608,8 @@ public class Board {
     @Override
     public String toString() {
         String s = "";
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
+        for (int i = 0; i < LENGTH; i++) {
+            for (int j = 0; j < LENGTH; j++) {
                 if(j<7)
                     s+=map[i][j]+"    ";
                 else if(j==7)
@@ -537,7 +619,13 @@ public class Board {
         }
         return s+"\n";
     }
-
+    public String[][] SetJogada(int x, int y) {
+        this.map[x][y]="W";
+        this.map[wolf.getRow()][wolf.getColumn()]="O";
+        wolf.setRow(x);
+        wolf.setColumn(y);
+        return map;
+    }
     
     
     

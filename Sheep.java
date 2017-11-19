@@ -13,6 +13,12 @@ public class Sheep {
     private int row;
     private int column;
 
+    public Sheep(int row, int column) {
+        this.row = row;
+        this.column = column;
+    }
+    
+    
     public int getRow() {
         return row;
     }

@@ -13,6 +13,12 @@ public class Wolf {
     private int row;
     private int column;
 
+    public Wolf(int row, int column) {
+        this.row = row;
+        this.column = column;
+    }
+    
+    
     public int getRow() {
         return row;
     }
@@ -28,5 +34,6 @@ public class Wolf {
     public void setColumn(int column) {
         this.column = column;
     }
+
     
 }

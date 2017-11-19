@@ -82,19 +82,18 @@ public class Board {
     }
     public boolean win(){
         if(wolf.getRow() == 0 && wolf.getColumn() == 7){
-            if(!"O".equals(map[wolf.getRow()+1][wolf.getColumn()])){
+            if(!"O".equals(map[wolf.getRow()+1][wolf.getColumn()-1])){
                 return true;
             }
-            else{
-                if(!"O".equals(map[wolf.getRow()+1][wolf.getColumn()-1]) && !"O".equals(map[wolf.getRow()+1][wolf.getColumn()+1])){
-                    return true;
-                }
+        }else if(wolf.getRow() == 0 && wolf.getColumn() != 7){
+            if(!"O".equals(map[wolf.getRow()+1][wolf.getColumn()-1]) && !"O".equals(map[wolf.getRow()+1][wolf.getColumn()+1])){
+                return true;
             }
         }else if(wolf.getColumn() == 0){
             if(!"O".equals(map[wolf.getRow()-1][wolf.getColumn()+1]) && !"O".equals(map[wolf.getRow()+1][wolf.getColumn()+1])){
                 return true;
             }
-        }else if(wolf.getColumn() == 7){
+        }else if(wolf.getColumn() == 7 && wolf.getRow() != 0){
            if(!"O".equals(map[wolf.getRow()-1][wolf.getColumn()-1]) && !"O".equals(map[wolf.getRow()+1][wolf.getColumn()-1])){
                 return true;
            } 
@@ -136,20 +135,9 @@ public class Board {
                 Board succ = t.clone();
                 if(player.equals(Player.Max)){
                     //ovelha 1
-                    if(t.sheep1.getRow() == 7){
+                    if(t.sheep1.getRow() == 7 && t.sheep1.getColumn() == 0){
                         //verifica se vazio
-                        if("O".equals(succ.getXY(t.sheep1.getRow()-1, t.sheep1.getColumn()+1)) && t.sheep1.getColumn() == 0){    
-                            //adiciona ovelha no mapa
-                            succ.setS(t.sheep1.getRow()-1, t.sheep1.getColumn()+1);
-                            //limpa posicao anterior da ovelha
-                            succ.setO(t.sheep1.getRow(),t.sheep1.getColumn());
-                            //atualiza a posicao da ovelha
-                            t.sheep1.setRow(t.sheep1.getRow()-1);
-                            t.sheep1.setColumn(t.sheep1.getColumn()+1);
-                            succ.getResult();
-                            child.add(succ);
-                        }else {
-                            if("O".equals(succ.getXY(t.sheep1.getRow()-1, t.sheep1.getColumn()+1))){    
+                        if("O".equals(succ.getXY(t.sheep1.getRow()-1, t.sheep1.getColumn()+1))){    
                                 //adiciona ovelha no mapa
                                 succ.setS(t.sheep1.getRow()-1, t.sheep1.getColumn()+1);
                                 //limpa posicao anterior da ovelha
@@ -160,20 +148,7 @@ public class Board {
                                 succ.getResult();
                                 child.add(succ);
                             }
-                            if("O".equals(succ.getXY(t.sheep1.getRow()-1, t.sheep1.getColumn()-1))){  
-                                succ = t.clone();
-                                //adiciona ovelha no mapa
-                                succ.setS(t.sheep1.getRow()-1, t.sheep1.getColumn()-1);
-                                //limpa posicao anterior da ovelha
-                                succ.setO(t.sheep1.getRow(),t.sheep1.getColumn());
-                                //atualiza a posicao da ovelha
-                                t.sheep1.setRow(t.sheep1.getRow()-1);
-                                t.sheep1.setColumn(t.sheep1.getColumn()-1);
-                                succ.getResult();
-                                child.add(succ);
-                            }   
-                        }
-                    }else if(t.sheep1.getColumn() == 0){
+                    }else if(t.sheep1.getRow() == 7 && t.sheep1.getColumn() != 0){
                         if("O".equals(succ.getXY(t.sheep1.getRow()-1, t.sheep1.getColumn()+1))){    
                             //adiciona ovelha no mapa
                             succ.setS(t.sheep1.getRow()-1, t.sheep1.getColumn()+1);
@@ -185,8 +160,32 @@ public class Board {
                             succ.getResult();
                             child.add(succ);
                         }
-                    }
-                    else if(t.sheep1.getColumn() == 7){
+                        if("O".equals(succ.getXY(t.sheep1.getRow()-1, t.sheep1.getColumn()-1))){  
+                            succ = t.clone();
+                            //adiciona ovelha no mapa
+                            succ.setS(t.sheep1.getRow()-1, t.sheep1.getColumn()-1);
+                            //limpa posicao anterior da ovelha
+                            succ.setO(t.sheep1.getRow(),t.sheep1.getColumn());
+                            //atualiza a posicao da ovelha
+                            t.sheep1.setRow(t.sheep1.getRow()-1);
+                            t.sheep1.setColumn(t.sheep1.getColumn()-1);
+                            succ.getResult();
+                            child.add(succ);
+                        }   
+                        
+                    }else if(t.sheep1.getColumn() == 0 && t.sheep1.getRow() != 7){
+                        if("O".equals(succ.getXY(t.sheep1.getRow()-1, t.sheep1.getColumn()+1))){    
+                            //adiciona ovelha no mapa
+                            succ.setS(t.sheep1.getRow()-1, t.sheep1.getColumn()+1);
+                            //limpa posicao anterior da ovelha
+                            succ.setO(t.sheep1.getRow(),t.sheep1.getColumn());
+                            //atualiza a posicao da ovelha
+                            t.sheep1.setRow(t.sheep1.getRow()-1);
+                            t.sheep1.setColumn(t.sheep1.getColumn()+1);
+                            succ.getResult();
+                            child.add(succ);
+                        }
+                    }else if(t.sheep1.getColumn() == 7){
                         if("O".equals(succ.getXY(t.sheep1.getRow()-1, t.sheep1.getColumn()-1))){    
                             //adiciona ovelha no mapa
                             succ.setS(t.sheep1.getRow()-1, t.sheep1.getColumn()-1);
@@ -225,20 +224,9 @@ public class Board {
                     }
                     //ovelha 2
                     succ = t.clone();
-                    if(t.sheep2.getRow() == 7){
+                    if(t.sheep2.getRow() == 7 && t.sheep2.getColumn() == 0){
                         //verifica se vazio
-                        if("O".equals(succ.getXY(t.sheep2.getRow()-1, t.sheep2.getColumn()+1)) && t.sheep2.getColumn() == 0){    
-                            //adiciona ovelha no mapa
-                            succ.setS(t.sheep2.getRow()-1, t.sheep2.getColumn()+1);
-                            //limpa posicao anterior da ovelha
-                            succ.setO(t.sheep2.getRow(),t.sheep2.getColumn());
-                            //atualiza a posicao da ovelha
-                            t.sheep2.setRow(t.sheep2.getRow()-1);
-                            t.sheep2.setColumn(t.sheep2.getColumn()+1);
-                            succ.getResult();
-                            child.add(succ);
-                        }else {
-                            if("O".equals(succ.getXY(t.sheep2.getRow()-1, t.sheep2.getColumn()+1))){    
+                        if("O".equals(succ.getXY(t.sheep2.getRow()-1, t.sheep2.getColumn()+1))){    
                                 //adiciona ovelha no mapa
                                 succ.setS(t.sheep2.getRow()-1, t.sheep2.getColumn()+1);
                                 //limpa posicao anterior da ovelha
@@ -249,20 +237,7 @@ public class Board {
                                 succ.getResult();
                                 child.add(succ);
                             }
-                            if("O".equals(succ.getXY(t.sheep2.getRow()-1, t.sheep2.getColumn()-1))){  
-                                succ = t.clone();
-                                //adiciona ovelha no mapa
-                                succ.setS(t.sheep2.getRow()-1, t.sheep2.getColumn()-1);
-                                //limpa posicao anterior da ovelha
-                                succ.setO(t.sheep2.getRow(),t.sheep2.getColumn());
-                                //atualiza a posicao da ovelha
-                                t.sheep2.setRow(t.sheep2.getRow()-1);
-                                t.sheep2.setColumn(t.sheep2.getColumn()-1);
-                                succ.getResult();
-                                child.add(succ);
-                            }   
-                        }
-                    }else if(t.sheep2.getColumn() == 0){
+                    }else if(t.sheep2.getRow() == 7 && t.sheep2.getColumn() != 0){
                         if("O".equals(succ.getXY(t.sheep2.getRow()-1, t.sheep2.getColumn()+1))){    
                             //adiciona ovelha no mapa
                             succ.setS(t.sheep2.getRow()-1, t.sheep2.getColumn()+1);
@@ -274,8 +249,32 @@ public class Board {
                             succ.getResult();
                             child.add(succ);
                         }
-                    }
-                    else if(t.sheep2.getColumn() == 7){
+                        if("O".equals(succ.getXY(t.sheep2.getRow()-1, t.sheep2.getColumn()-1))){  
+                            succ = t.clone();
+                            //adiciona ovelha no mapa
+                            succ.setS(t.sheep2.getRow()-1, t.sheep2.getColumn()-1);
+                            //limpa posicao anterior da ovelha
+                            succ.setO(t.sheep2.getRow(),t.sheep2.getColumn());
+                            //atualiza a posicao da ovelha
+                            t.sheep2.setRow(t.sheep2.getRow()-1);
+                            t.sheep2.setColumn(t.sheep2.getColumn()-1);
+                            succ.getResult();
+                            child.add(succ);
+                        }   
+                        
+                    }else if(t.sheep2.getColumn() == 0 && t.sheep2.getRow() != 7){
+                        if("O".equals(succ.getXY(t.sheep2.getRow()-1, t.sheep2.getColumn()+1))){    
+                            //adiciona ovelha no mapa
+                            succ.setS(t.sheep2.getRow()-1, t.sheep2.getColumn()+1);
+                            //limpa posicao anterior da ovelha
+                            succ.setO(t.sheep2.getRow(),t.sheep2.getColumn());
+                            //atualiza a posicao da ovelha
+                            t.sheep2.setRow(t.sheep2.getRow()-1);
+                            t.sheep2.setColumn(t.sheep2.getColumn()+1);
+                            succ.getResult();
+                            child.add(succ);
+                        }
+                    }else if(t.sheep2.getColumn() == 7){
                         if("O".equals(succ.getXY(t.sheep2.getRow()-1, t.sheep2.getColumn()-1))){    
                             //adiciona ovelha no mapa
                             succ.setS(t.sheep2.getRow()-1, t.sheep2.getColumn()-1);
@@ -314,20 +313,9 @@ public class Board {
                     }
                     //sheep 3
                     succ = t.clone();
-                    if(t.sheep3.getRow() == 7){
+                    if(t.sheep3.getRow() == 7 && t.sheep3.getColumn() == 0){
                         //verifica se vazio
-                        if("O".equals(succ.getXY(t.sheep3.getRow()-1, t.sheep3.getColumn()+1)) && t.sheep3.getColumn() == 0){    
-                            //adiciona ovelha no mapa
-                            succ.setS(t.sheep3.getRow()-1, t.sheep3.getColumn()+1);
-                            //limpa posicao anterior da ovelha
-                            succ.setO(t.sheep3.getRow(),t.sheep3.getColumn());
-                            //atualiza a posicao da ovelha
-                            t.sheep3.setRow(t.sheep3.getRow()-1);
-                            t.sheep3.setColumn(t.sheep3.getColumn()+1);
-                            succ.getResult();
-                            child.add(succ);
-                        }else {
-                            if("O".equals(succ.getXY(t.sheep3.getRow()-1, t.sheep3.getColumn()+1))){    
+                        if("O".equals(succ.getXY(t.sheep3.getRow()-1, t.sheep3.getColumn()+1))){    
                                 //adiciona ovelha no mapa
                                 succ.setS(t.sheep3.getRow()-1, t.sheep3.getColumn()+1);
                                 //limpa posicao anterior da ovelha
@@ -338,20 +326,7 @@ public class Board {
                                 succ.getResult();
                                 child.add(succ);
                             }
-                            if("O".equals(succ.getXY(t.sheep3.getRow()-1, t.sheep3.getColumn()-1))){  
-                                succ = t.clone();
-                                //adiciona ovelha no mapa
-                                succ.setS(t.sheep3.getRow()-1, t.sheep3.getColumn()-1);
-                                //limpa posicao anterior da ovelha
-                                succ.setO(t.sheep3.getRow(),t.sheep3.getColumn());
-                                //atualiza a posicao da ovelha
-                                t.sheep3.setRow(t.sheep3.getRow()-1);
-                                t.sheep3.setColumn(t.sheep3.getColumn()-1);
-                                succ.getResult();
-                                child.add(succ);
-                            }   
-                        }
-                    }else if(t.sheep3.getColumn() == 0){
+                    }else if(t.sheep3.getRow() == 7 && t.sheep3.getColumn() != 0){
                         if("O".equals(succ.getXY(t.sheep3.getRow()-1, t.sheep3.getColumn()+1))){    
                             //adiciona ovelha no mapa
                             succ.setS(t.sheep3.getRow()-1, t.sheep3.getColumn()+1);
@@ -363,8 +338,32 @@ public class Board {
                             succ.getResult();
                             child.add(succ);
                         }
-                    }
-                    else if(t.sheep3.getColumn() == 7){
+                        if("O".equals(succ.getXY(t.sheep3.getRow()-1, t.sheep3.getColumn()-1))){  
+                            succ = t.clone();
+                            //adiciona ovelha no mapa
+                            succ.setS(t.sheep3.getRow()-1, t.sheep3.getColumn()-1);
+                            //limpa posicao anterior da ovelha
+                            succ.setO(t.sheep3.getRow(),t.sheep3.getColumn());
+                            //atualiza a posicao da ovelha
+                            t.sheep3.setRow(t.sheep3.getRow()-1);
+                            t.sheep3.setColumn(t.sheep3.getColumn()-1);
+                            succ.getResult();
+                            child.add(succ);
+                        }   
+                        
+                    }else if(t.sheep3.getColumn() == 0 && t.sheep3.getRow() != 7){
+                        if("O".equals(succ.getXY(t.sheep3.getRow()-1, t.sheep3.getColumn()+1))){    
+                            //adiciona ovelha no mapa
+                            succ.setS(t.sheep3.getRow()-1, t.sheep3.getColumn()+1);
+                            //limpa posicao anterior da ovelha
+                            succ.setO(t.sheep3.getRow(),t.sheep3.getColumn());
+                            //atualiza a posicao da ovelha
+                            t.sheep3.setRow(t.sheep3.getRow()-1);
+                            t.sheep3.setColumn(t.sheep3.getColumn()+1);
+                            succ.getResult();
+                            child.add(succ);
+                        }
+                    }else if(t.sheep3.getColumn() == 7){
                         if("O".equals(succ.getXY(t.sheep3.getRow()-1, t.sheep3.getColumn()-1))){    
                             //adiciona ovelha no mapa
                             succ.setS(t.sheep3.getRow()-1, t.sheep3.getColumn()-1);
@@ -403,20 +402,9 @@ public class Board {
                     }
                     //ovelha 4
                     succ = t.clone();
-                    if(t.sheep4.getRow() == 7){
+                    if(t.sheep4.getRow() == 7 && t.sheep4.getColumn() == 0){
                         //verifica se vazio
-                        if("O".equals(succ.getXY(t.sheep4.getRow()-1, t.sheep4.getColumn()+1)) && t.sheep4.getColumn() == 0){    
-                            //adiciona ovelha no mapa
-                            succ.setS(t.sheep4.getRow()-1, t.sheep4.getColumn()+1);
-                            //limpa posicao anterior da ovelha
-                            succ.setO(t.sheep4.getRow(),t.sheep4.getColumn());
-                            //atualiza a posicao da ovelha
-                            t.sheep4.setRow(t.sheep4.getRow()-1);
-                            t.sheep4.setColumn(t.sheep4.getColumn()+1);
-                            succ.getResult();
-                            child.add(succ);
-                        }else {
-                            if("O".equals(succ.getXY(t.sheep4.getRow()-1, t.sheep4.getColumn()+1))){    
+                        if("O".equals(succ.getXY(t.sheep4.getRow()-1, t.sheep4.getColumn()+1))){    
                                 //adiciona ovelha no mapa
                                 succ.setS(t.sheep4.getRow()-1, t.sheep4.getColumn()+1);
                                 //limpa posicao anterior da ovelha
@@ -427,20 +415,7 @@ public class Board {
                                 succ.getResult();
                                 child.add(succ);
                             }
-                            if("O".equals(succ.getXY(t.sheep4.getRow()-1, t.sheep4.getColumn()-1))){  
-                                succ = t.clone();
-                                //adiciona ovelha no mapa
-                                succ.setS(t.sheep4.getRow()-1, t.sheep4.getColumn()-1);
-                                //limpa posicao anterior da ovelha
-                                succ.setO(t.sheep4.getRow(),t.sheep4.getColumn());
-                                //atualiza a posicao da ovelha
-                                t.sheep4.setRow(t.sheep4.getRow()-1);
-                                t.sheep4.setColumn(t.sheep4.getColumn()-1);
-                                succ.getResult();
-                                child.add(succ);
-                            }   
-                        }
-                    }else if(t.sheep4.getColumn() == 0){
+                    }else if(t.sheep4.getRow() == 7 && t.sheep4.getColumn() != 0){
                         if("O".equals(succ.getXY(t.sheep4.getRow()-1, t.sheep4.getColumn()+1))){    
                             //adiciona ovelha no mapa
                             succ.setS(t.sheep4.getRow()-1, t.sheep4.getColumn()+1);
@@ -452,8 +427,32 @@ public class Board {
                             succ.getResult();
                             child.add(succ);
                         }
-                    }
-                    else if(t.sheep4.getColumn() == 7){
+                        if("O".equals(succ.getXY(t.sheep4.getRow()-1, t.sheep4.getColumn()-1))){  
+                            succ = t.clone();
+                            //adiciona ovelha no mapa
+                            succ.setS(t.sheep4.getRow()-1, t.sheep4.getColumn()-1);
+                            //limpa posicao anterior da ovelha
+                            succ.setO(t.sheep4.getRow(),t.sheep4.getColumn());
+                            //atualiza a posicao da ovelha
+                            t.sheep4.setRow(t.sheep4.getRow()-1);
+                            t.sheep4.setColumn(t.sheep4.getColumn()-1);
+                            succ.getResult();
+                            child.add(succ);
+                        }   
+                        
+                    }else if(t.sheep4.getColumn() == 0 && t.sheep4.getRow() != 7){
+                        if("O".equals(succ.getXY(t.sheep4.getRow()-1, t.sheep4.getColumn()+1))){    
+                            //adiciona ovelha no mapa
+                            succ.setS(t.sheep4.getRow()-1, t.sheep4.getColumn()+1);
+                            //limpa posicao anterior da ovelha
+                            succ.setO(t.sheep4.getRow(),t.sheep4.getColumn());
+                            //atualiza a posicao da ovelha
+                            t.sheep4.setRow(t.sheep4.getRow()-1);
+                            t.sheep4.setColumn(t.sheep4.getColumn()+1);
+                            succ.getResult();
+                            child.add(succ);
+                        }
+                    }else if(t.sheep4.getColumn() == 7){
                         if("O".equals(succ.getXY(t.sheep4.getRow()-1, t.sheep4.getColumn()-1))){    
                             //adiciona ovelha no mapa
                             succ.setS(t.sheep4.getRow()-1, t.sheep4.getColumn()-1);
@@ -492,7 +491,7 @@ public class Board {
                     }
                 //movimentos do lobo
                 }else{
-                    if(t.wolf.getRow() == 0){
+                    if(t.wolf.getRow() == 0 && t.wolf.getColumn() == 7){
                         //verifica diagonal esquerda inferior vazia
                         if("O".equals(succ.getXY(t.wolf.getRow()+1, t.wolf.getColumn()-1))){
                             //adiciona lobo no mapa
@@ -505,9 +504,9 @@ public class Board {
                             succ.getResult();
                             child.add(succ);
                         }
+                    }else if(t.wolf.getRow() == 0 && t.wolf.getColumn() != 7){
                         //verifica diagonal direita inferior vazia
                         if("O".equals(succ.getXY(t.wolf.getRow()+1, t.wolf.getColumn()+1))){
-                            succ = t.clone();
                             succ.setW(t.wolf.getRow()+1, t.wolf.getColumn()+1);
                             succ.setO(t.wolf.getRow(),t.wolf.getColumn());
                             t.wolf.setRow(t.wolf.getRow()+1);
@@ -515,7 +514,16 @@ public class Board {
                             succ.getResult();
                             child.add(succ);
                         }
-                        
+                        //verifica diagonal esquerda inferior vazia
+                        if("O".equals(succ.getXY(t.wolf.getRow()+1, t.wolf.getColumn()-1))){
+                            succ = t.clone();
+                            succ.setW(t.wolf.getRow()+1, t.wolf.getColumn()-1);
+                            succ.setO(t.wolf.getRow(),t.wolf.getColumn());
+                            t.wolf.setRow(t.wolf.getRow()+1);
+                            t.wolf.setColumn(t.wolf.getColumn()-1);
+                            succ.getResult();
+                            child.add(succ);
+                        } 
                     }else if(t.wolf.getColumn() == 0){
                         if("O".equals(succ.getXY(t.wolf.getRow()+1, t.wolf.getColumn()+1))){
                             succ.setW(t.wolf.getRow()+1, t.wolf.getColumn()+1);
@@ -534,33 +542,25 @@ public class Board {
                             succ.getResult();
                             child.add(succ);
                         }
-                    }else if(t.wolf.getColumn() == 7){
-                        if(t.wolf.getRow() == 0 && "O".equals(succ.getXY(t.wolf.getRow()+1, t.wolf.getColumn()-1))){
+                    }else if(t.wolf.getColumn() == 7 && t.wolf.getRow() != 0){
+                        if("O".equals(succ.getXY(t.wolf.getRow()+1, t.wolf.getColumn()-1))){
                             succ.setW(t.wolf.getRow()+1, t.wolf.getColumn()-1);
                             succ.setO(t.wolf.getRow(),t.wolf.getColumn());
                             t.wolf.setRow(t.wolf.getRow()+1);
                             t.wolf.setColumn(t.wolf.getColumn()-1);
                             succ.getResult();
                             child.add(succ);
-                        }else{
-                            if("O".equals(succ.getXY(t.wolf.getRow()+1, t.wolf.getColumn()-1))){
-                                succ.setW(t.wolf.getRow()+1, t.wolf.getColumn()-1);
-                                succ.setO(t.wolf.getRow(),t.wolf.getColumn());
-                                t.wolf.setRow(t.wolf.getRow()+1);
-                                t.wolf.setColumn(t.wolf.getColumn()-1);
-                                succ.getResult();
-                                child.add(succ);
-                            }
-                            if("O".equals(succ.getXY(t.wolf.getRow()-1, t.wolf.getColumn()-1))){
-                                succ = t.clone();
-                                succ.setW(t.wolf.getRow()-1, t.wolf.getColumn()-1);
-                                succ.setO(t.wolf.getRow(),t.wolf.getColumn());
-                                t.wolf.setRow(t.wolf.getRow()-1);
-                                t.wolf.setColumn(t.wolf.getColumn()-1);
-                                succ.getResult();
-                                child.add(succ);
-                            }
                         }
+                        if("O".equals(succ.getXY(t.wolf.getRow()-1, t.wolf.getColumn()-1))){
+                            succ = t.clone();
+                            succ.setW(t.wolf.getRow()-1, t.wolf.getColumn()-1);
+                            succ.setO(t.wolf.getRow(),t.wolf.getColumn());
+                            t.wolf.setRow(t.wolf.getRow()-1);
+                            t.wolf.setColumn(t.wolf.getColumn()-1);
+                            succ.getResult();
+                            child.add(succ);
+                        }
+                        
                     }else{
                         if("O".equals(succ.getXY(t.wolf.getRow()-1, t.wolf.getColumn()-1))){
                             succ.setW(t.wolf.getRow()-1, t.wolf.getColumn()-1);
@@ -621,9 +621,9 @@ public class Board {
     }
     public String[][] SetJogada(int x, int y) {
         this.map[x][y]="W";
-        this.map[wolf.getRow()][wolf.getColumn()]="O";
-        wolf.setRow(x);
-        wolf.setColumn(y);
+        this.map[this.wolf.getRow()][this.wolf.getColumn()]="O";
+        this.wolf.setRow(x);
+        this.wolf.setColumn(y);
         return map;
     }
     

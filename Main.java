@@ -35,6 +35,7 @@ public class Main {
             //Jogada Ovelha
             board.setPlayer(Player.Max);
             board = minimax.minimaxDecision(board);
+            System.out.println("Game\n\n" + board.toString());
             teste++;
         }while(teste<10);
         

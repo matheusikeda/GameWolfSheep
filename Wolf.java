@@ -12,12 +12,15 @@ package br.ufop.ia.gamewolfsheep;
 public class Wolf {
     private int row;
     private int column;
-
+    
     public Wolf(int row, int column) {
         this.row = row;
         this.column = column;
     }
-    
+    public Wolf(Wolf w) {
+        this.row = w.row;
+        this.column = w.column;
+    }
     
     public int getRow() {
         return row;

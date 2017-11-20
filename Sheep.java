@@ -17,9 +17,12 @@ public class Sheep {
         this.row = row;
         this.column = column;
     }
+    public Sheep(Sheep w) {
+        this.row = w.row;
+        this.column = w.column;
+    }
     
-    
-    public int getRow() {
+    public int getRow(){
         return row;
     }
 

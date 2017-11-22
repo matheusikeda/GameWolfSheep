@@ -20,7 +20,7 @@ public class MiniMax {
     private int alfa = Integer.MIN_VALUE;
     private int beta = Integer.MAX_VALUE;
 
-    public Board minimaxDecision(Board tabuleiro) {
+    public Board minimaxDecision(Board tabuleiro) throws CloneNotSupportedException {
         int melhor = MaxValue(tabuleiro);
         ArrayList<Board> filhos = tabuleiro.getAllBoard();
         for (Board filho : filhos) {
@@ -33,14 +33,14 @@ public class MiniMax {
         return null;
     }
 
-    private int MinValue(Board board) {
+    private int MinValue(Board board) throws CloneNotSupportedException {
         if (board.isTerminal()) {
             board.setValue(board.getResult());
             return board.getValue();
         } else {
             board.setValue(Integer.MAX_VALUE);
             board.setPlayer(Player.Min);
-            ArrayList<Board> filhos = board.getAllMoves(board);
+            ArrayList<Board> filhos = board.getAllMoves();
             for (Board filho : filhos) {
                 int minValue = Math.min(board.getValue(), MaxValue(filho));
                 //Corte alfa beta
@@ -57,14 +57,14 @@ public class MiniMax {
         }
     }
 
-    private int MaxValue(Board board) {
+    private int MaxValue(Board board) throws CloneNotSupportedException {
         if (board.isTerminal()) {
             board.setValue(board.getResult());
             return board.getValue();
         } else {
             board.setValue(Integer.MIN_VALUE);
             board.setPlayer(Player.Max);
-            ArrayList<Board> filhos = board.getAllMoves(board);
+            ArrayList<Board> filhos = board.getAllMoves();
             for (Board filho : filhos) {
                 int maxValue = Math.max(board.getValue(), MinValue(filho));
                 //Corte alfa beta

@@ -9,17 +9,13 @@ package br.ufop.ia.gamewolfsheep;
  *
  * @author Matheus Ikeda
  */
-public class Sheep {
+public class Sheep implements Cloneable{
     private int row;
     private int column;
 
     public Sheep(int row, int column) {
         this.row = row;
         this.column = column;
-    }
-    public Sheep(Sheep w) {
-        this.row = w.row;
-        this.column = w.column;
     }
     
     public int getRow(){
@@ -38,4 +34,7 @@ public class Sheep {
         this.column = column;
     }
     
+    protected Object clone() throws CloneNotSupportedException{
+        return super.clone();
+    }
 }

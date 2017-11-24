@@ -16,51 +16,27 @@ public class Main {
 
     public static void main(String[] args) throws CloneNotSupportedException {
         // TODO code application logic here
-        Board board = new Board();
-        Wolf w = new Wolf(0,3);
-        Sheep s1 = new Sheep(7,0);
-        Sheep s2 = new Sheep(7,2);
-        Sheep s3 = new Sheep(7,4);
-        Sheep s4 = new Sheep(7,6);
-        String[][] map = new String[8][8];
-        
-        board.setMap(map);
-        
-        board.setWolf(w);
-        board.setSheep1(s1);
-        board.setSheep2(s2);
-        board.setSheep3(s3);
-        board.setSheep4(s4);
-        
+        Board board = new Board();        
         MiniMax minimax = new MiniMax();
+        int row,column;
         Scanner ler = new Scanner(System.in);
         
-        int row, column;
-        int teste=0;
         board.inicialize();
-        board.iniciaArray(board);
-        //System.out.println("Game\n\n" + board.toString());
-        //do{
+        System.out.println("Game\n\n" + board.toString());
+        while(!board.isTerminal()){
             //Jogada Lobo
-//            board.setPlayer(Player.Min);
-//            System.out.println("Insira posicao lobo: linha\n");
-//            row = ler.nextInt();
-//            System.out.println("Insira posicao lobo: coluna\n");
-//            column = ler.nextInt();    
-//            board.SetJogada(row, column);
-//            System.out.println("Game\n\n" + board.toString());
-            //Jogada Ovelha
-            board.setPlayer(Player.Max);
-           // ArrayList<Board> filhos = board.getAllMoves();
-//            for (int i=0;i<filhos.size();i++){
-//                
-//                System.out.println("entrei");
-//                System.out.println(filhos.get(i).toString());
-//            }
-            board = minimax.minimaxDecision(board);
+            board.setPlayer(Player.Min);
+            System.out.println("Insira posicao lobo: linha\n");
+            row = ler.nextInt();
+            System.out.println("Insira posicao lobo: coluna\n");
+            column = ler.nextInt();    
+            board.SetJogada(row, column);
             System.out.println("Game\n\n" + board.toString());
-            //teste++;
-        //}while(teste<10);
+            //Jogada Ovelha
+            board.setPlayer(Player.Max);             
+            board = minimax.minimaxDecision(board);            
+            System.out.println("\nMin\n\n" + board.toString());
+        }
         
     }
     

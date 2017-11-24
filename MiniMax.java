@@ -40,7 +40,7 @@ public class MiniMax {
         } else {
             board.setValue(Integer.MAX_VALUE);
             board.setPlayer(Player.Min);
-            ArrayList<Board> filhos = board.getAllMoves();
+            ArrayList<Board> filhos = board.getAllMoves(board);
             for (Board filho : filhos) {
                 int minValue = Math.min(board.getValue(), MaxValue(filho));
                 //Corte alfa beta
@@ -64,7 +64,7 @@ public class MiniMax {
         } else {
             board.setValue(Integer.MIN_VALUE);
             board.setPlayer(Player.Max);
-            ArrayList<Board> filhos = board.getAllMoves();
+            ArrayList<Board> filhos = board.getAllMoves(board);
             for (Board filho : filhos) {
                 int maxValue = Math.max(board.getValue(), MinValue(filho));
                 //Corte alfa beta
